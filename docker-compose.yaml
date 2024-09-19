@@ -1,0 +1,10 @@
+services:
+  backend:
+    image: cimg/go:1.22.7
+    command: go run main.go
+    ports:
+      - "8080:8080"
+    volumes:
+      - .:/app
+    working_dir: /app
+    entrypoint: [ "go", "run", "main.go" ]
