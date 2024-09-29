@@ -8,3 +8,12 @@ services:
     # Important to bind/mount your codebase dir to /app dir for live reload
     volumes:
       - ./:/app
+  react:
+    image: node:lts-iron
+    working_dir: /app
+    volumes:
+      - ./client:/app
+      - /app/node_modules
+    ports:
+      - 8081:8081
+    command: sh -c "npm install && npm run dev"

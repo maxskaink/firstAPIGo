@@ -1,0 +1,9 @@
+.form-add-todo{
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+body{
+    background-color: #001c39 !important;
+}
