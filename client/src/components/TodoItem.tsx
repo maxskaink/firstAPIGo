@@ -32,6 +32,27 @@ import { BASE_URL } from "../App";
         }
 	})
 	
+	const {mutate: deleteTodo, isPending:isDeleting} = useMutation({
+		mutationKey: ["deleteTodo"],
+		mutationFn: async () => {
+			try {
+				const res = await fetch(BASE_URL + "/todos/" + todo._id, {
+					method: "DELETE",
+				})
+				const data = await res.json()
+				if (!res.ok) {
+					throw new Error(data.message)
+				}
+				return data
+			} catch (error) {
+				console.error(error)
+			}
+		},
+		onSuccess: () => {
+			queryClient.invalidateQueries({queryKey: ["todos"]})
+		}
+	})
+
  	return (
  		<Flex gap={2} alignItems={"center"}>
  			<Flex
@@ -44,7 +65,7 @@ import { BASE_URL } from "../App";
  				justifyContent={"space-between"}
  			>
  				<Text
- 					color={todo.completed ? "green.200" : "yellow.100"}
+ 					color={todo.completed ? "green.200" : "black.100"}
  					textDecoration={todo.completed ? "line-through" : "none"}
  				>
  					{todo.body}
@@ -65,8 +86,13 @@ import { BASE_URL } from "../App";
  					{!isUpdating && <FaCheckCircle size={25} />}
 					{isUpdating && <Spinner size={"sm"} />}
  				</Box>
- 				<Box color={"red.500"} cursor={"pointer"}>
- 					<MdDelete size={25} />
+ 				<Box 
+					color={"red.500"} 
+					cursor={"pointer"}
+					onClick={() => deleteTodo()}
+				>
+				{!isDeleting && <MdDelete size={25} />}
+				{isDeleting && <Spinner size={"sm"} />}
  				</Box>
  			</Flex>
  		</Flex>
